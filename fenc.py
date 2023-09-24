@@ -36,7 +36,7 @@ def main(input_file_path, new_data_file_path, output_folder):
 
                         if data_type == 0x54:
                             unk1 = struct.unpack('<I', input_file.read(4))[0]
-                            xor_key = struct.unpack('<I', input_file.read(4))[0]
+                            org_xor_key = struct.unpack('<I', input_file.read(4))[0]
                             # 데이터 읽기
                             data = input_file.read(data_length - 9 - 4)
 
@@ -46,6 +46,11 @@ def main(input_file_path, new_data_file_path, output_folder):
 
                             # 데이터를 UTF-16 LE로 인코딩하고 바이트로 변환
                             new_data_bytes = new_data.encode('utf-16-le')
+                            
+                            # 새로운 XOR 키 값 계산.
+                            xor_key = len(new_data_bytes) // 2
+                            #print(f"XOR key: {xor_key}")
+                            
                             # 데이터 뒤에 0x0a00 바이트 추가
                             #new_data_bytes += b'\x0a\x00'
                             # 암호화
